@@ -1,3 +1,5 @@
-*
-!backend/
-!frontend/
+code-server/
+logs/
+traefik/
+docker-compose.yml
+.gitignore
