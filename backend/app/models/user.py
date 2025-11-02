@@ -1,15 +1,13 @@
-from sqlalchemy import Column, Integer, String, DateTime, Boolean
+from sqlalchemy import Column, String, DateTime, Boolean
 from app.database.session import Base
-from datetime import datetime
-
 
 class User(Base):
     __tablename__ = "users"
 
-    id = Column(Integer, primary_key=True, index=True)
-    username = Column(String(15), unique=True, index=True, nullable=False)
-    email = Column(String(50), unique=True, index=True, nullable=False)
-    hashed_password = Column(String, nullable=False)
-    is_superuser = Column(Boolean, default=False)
-    created_at = Column(DateTime, default=datetime.utcnow)
-    updated_at = Column(DateTime, nullable=True)
+    email = Column(String, primary_key=True, nullable=False)
+    name = Column(String, nullable=False)
+    password_hash = Column(String, nullable=False)
+    created_at = Column(DateTime, nullable=False)
+    is_admin = Column(Boolean, nullable=False, default=False)
+    is_organizer = Column(Boolean, nullable=False, default=False)
+    phone_number = Column(String, nullable=True)
