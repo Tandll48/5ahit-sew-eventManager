@@ -9,7 +9,10 @@ from app.crud import user as crud
 
 # models must be imported and registered from app.models to create the tables
 from app.models.user import User
-
+from app.models.venue import Venue
+from app.models.booking import Booking
+from app.models.ticket import Ticket
+from app.models.event import Event
 
 def init_db(session: Session) -> None:
     """
@@ -27,7 +30,8 @@ def init_db(session: Session) -> None:
     ).first()
     if not superuser:
         user_in = schemas.UserCreate(
-            username=settings.FIRST_SUPERUSER,
+            name=settings.FIRST_SUPERUSER,
+            phone_number=settings.FIRST_SUPERUSER_PHONE,
             email=settings.FIRST_SUPERUSER_EMAIL,
             password=settings.FIRST_SUPERUSER_PASSWORD,
         )

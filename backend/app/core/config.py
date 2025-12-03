@@ -20,7 +20,10 @@ class Settings(BaseSettings):
     )
     API_V1_STR: str = "/api"
     ENVIRONMENT: Literal["local", "staging", "production"] = "local"
-    SECRET_KEY: str = secrets.token_urlsafe(32)
+
+    ##Mein eigener Key beim alten generierten ist es nicht gegangen!
+    SECRET_KEY: str = "zjZ7O5vQ2i7TQ5zoY4kt8NqU4eBY7VZ0yA2u9FjK2K4"
+
     # 60 minutes * 24 hours * 8 days = 8 days
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8
 
@@ -34,6 +37,7 @@ class Settings(BaseSettings):
     FIRST_SUPERUSER_EMAIL: EmailStr = "admin@admin.com"
     FIRST_SUPERUSER: str = "admin"
     FIRST_SUPERUSER_PASSWORD: str = "changethis"
+    FIRST_SUPERUSER_PHONE: str = "+436658123"
 
     @computed_field  # type: ignore[prop-decorator]
     @property

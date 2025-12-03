@@ -1,6 +1,7 @@
 from collections.abc import Generator
 from typing import Annotated
 
+from sqlalchemy import Boolean
 from sqlalchemy.orm import Session
 
 import jwt
@@ -55,32 +56,29 @@ def get_current_user(session: SessionDep, token: TokenDep) -> User:
     Raises:
         HTTPException: If the token is invalid, credentials cannot be validated,
                        the user is not found, or the user is inactive.
+                       
     """
     try:
         payload = jwt.decode(
             token, settings.SECRET_KEY, algorithms=[security.ALGORITHM]
         )
-        username = payload.get("sub")
-        if username is None:
+        name = payload.get("sub")
+        if name is None:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Could not validate credentials",
             )
-        token_data = TokenData(username=username)
+        token_data = TokenData(name=name)
     except (InvalidTokenError, ValidationError):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Could not validate credentials",
         )
-    assert token_data.username is not None
-    user = get_user_by_email(db=session, email=token_data.username)
+    assert token_data.name is not None
+    user = get_user_by_email(db=session, email=token_data.name)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
-        )
-    if user.updated_at is not None:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, detail="Inactive user"
         )
     return user
 
@@ -88,22 +86,54 @@ def get_current_user(session: SessionDep, token: TokenDep) -> User:
 CurrentUser = Annotated[User, Depends(get_current_user)]
 
 
-def get_current_active_superuser(current_user: CurrentUser) -> User:
-    """
-    Verify if the current user is a superuser.
+# def get_current_organizer(current_user: CurrentUser) -> User:
+#     if not current_user.is_organizer:
+#         raise HTTPException(
+#             status_code=status.HTTP_403_FORBIDDEN,
+#             detail="The user doesn't have enough privileges",
+#         )
+#     return current_user
 
-    Args:
-        current_user (CurrentUser): The user object to be checked.
+def authorize_admin(current_user:CurrentUser) -> User:
+    print(current_user.is_admin)
+    if not current_user.is_admin:
+        not_enough_priviliges()
+    return current_user
 
-    Returns:
-        User: The current user if they are a superuser.
+def authorize_organizer(current_user:CurrentUser) -> User:
+    if not current_user.is_organizer:
+        not_enough_priviliges()
+    return current_user
 
-    Raises:
-        HTTPException: If the current user is not a superuser, an HTTP 403 Forbidden exception is raised.
-    """
-    if not current_user.is_superuser:
-        raise HTTPException(
+def authorize_admin_or_organizer(current_user: CurrentUser) -> User:
+    if not (current_user.is_admin or current_user.is_organizer):
+        not_enough_priviliges()
+    return current_user
+
+
+def not_enough_priviliges():
+    raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="The user doesn't have enough privileges",
         )
-    return current_user
+
+
+# def get_current_active_superuser(current_user: CurrentUser) -> User:
+#     """
+#     Verify if the current user is a superuser.
+
+#     Args:
+#         current_user (CurrentUser): The user object to be checked.
+
+#     Returns:
+#         User: The current user if they are a superuser.
+
+#     Raises:
+#         HTTPException: If the current user is not a superuser, an HTTP 403 Forbidden exception is raised.
+#     """
+#     if not current_user.is_admin:
+#         raise HTTPException(
+#             status_code=status.HTTP_403_FORBIDDEN,
+#             detail="The user doesn't have enough privileges",
+#         )
+#     return current_user
