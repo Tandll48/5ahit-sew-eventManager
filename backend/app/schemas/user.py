@@ -4,12 +4,14 @@ from typing import Optional
 
 
 class UserBase(BaseModel):
-    username: str = Field(..., min_length=5, max_length=15)
+    name: str = Field(..., min_length=5, max_length=15)
     email: EmailStr = Field(..., min_length=7, max_length=50)
+    phone_number: str= Field(..., min_length=5, max_length = 20)
 
 
 class UserCreate(UserBase):
     password: str = Field(..., min_length=1, max_length=50)
+    is_admin: bool = False
 
 
 class UserUpdate(UserBase):
@@ -19,8 +21,8 @@ class UserUpdate(UserBase):
 class UserInDBBase(UserBase):
     id: int
     created_at: datetime
-    updated_at: Optional[datetime] = None
-    is_superuser: bool = False
+    is_admin: bool = False
+    is_organizer: bool = False
 
     class Config:
         from_attributes = True
@@ -31,4 +33,4 @@ class User(UserInDBBase):
 
 
 class UserInDB(UserInDBBase):
-    hashed_password: str
+    password: str
