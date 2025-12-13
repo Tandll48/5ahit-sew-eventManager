@@ -27,7 +27,7 @@ import { Button } from '@/components/ui/button'
 
 interface User {
   id: number
-  username: string
+  name: string
   email: string
 }
 
@@ -54,7 +54,7 @@ export default function DashboardPage() {
 
 
   const filteredData = users.filter((item) =>
-    item.username.toLowerCase().includes(search.toLowerCase()) ||
+    item.name.toLowerCase().includes(search.toLowerCase()) ||
     item.email.toLowerCase().includes(search.toLowerCase())
   )
 
@@ -103,7 +103,7 @@ useEffect(() => {
                 onClick={() => openDialog(user)}
                 >
                 <TableCell>{user.id}</TableCell>
-                <TableCell>{user.username}</TableCell>
+                <TableCell>{user.name}</TableCell>
                 <TableCell>{user.email}</TableCell>
               </TableRow>
             ))}
@@ -118,11 +118,11 @@ useEffect(() => {
           {selectedUser && (
             <div className="space-y-4 mt-4">
               <Input
-                value={selectedUser.username}
+                value={selectedUser.name}
                 onChange={(e) =>
-                  setSelectedUser({ ...selectedUser, username: e.target.value })
+                  setSelectedUser({ ...selectedUser, name: e.target.value })
                 }
-                placeholder="Username"
+                placeholder="name"
               />
               <Input
                 value={selectedUser.email}

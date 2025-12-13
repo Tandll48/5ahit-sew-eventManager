@@ -5,7 +5,7 @@ from fastapi.testclient import TestClient
 from app.database.session import Base
 from app.api.deps import get_db, get_current_user
 from app.models.user import User
-from app.main import app
+from main import app
 from datetime import datetime
 from passlib.context import CryptContext
 
@@ -40,14 +40,14 @@ def client(db):
         Base.metadata.create_all(bind=engine) 
         yield db
 
-    app.dependency_overrides[get_db] = override_get_db
+    dependency_overrides[get_db] = override_get_db
     return TestClient(app)
 
 
 @pytest.fixture
 def test_superuser(db):
     """Creates a superuser in the test database."""
-    user = User(username="superuser", email="superuser@example.com", hashed_password=hash_password("Kennwort1"), is_superuser=True, created_at=datetime.now())
+    user = User(name="superuser", email="superuser@example.com", password=hash_password("Kennwort1"), is_superuser=True, created_at=datetime.now())
     db.add(user)
     db.commit()
     db.refresh(user)
@@ -59,7 +59,7 @@ def client_with_superuser(client, test_superuser):
     def override_get_current_user():
         return test_superuser  
     
-    app.dependency_overrides[get_current_user] = override_get_current_user
+    dependency_overrides[get_current_user] = override_get_current_user
     return client
 
 
