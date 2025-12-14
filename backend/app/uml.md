@@ -33,6 +33,7 @@ class Venue {
   - name: string
   - address: string
   - capacity: int
+  - inactive_since
   --
   + createVenue()
   + getVenue()
@@ -72,6 +73,8 @@ class Ticket {
   + readTicket()
   + updateTicket()
   + deleteTicket()
+  + getAllSoldTicketsByEvent()
+  + getAllAvailableTicketsByEvent()
 }
 
 class Booking {
@@ -79,6 +82,7 @@ class Booking {
   - booking_date: datetime
   - user_id: int     -- FK -> User
   - total_price: decimal
+  - status: BookingStatus
   --
   + createBooking()
   + readBooking()
@@ -88,6 +92,7 @@ class Booking {
   + removeTicket(ticket_id: int)
   + completeBooking()
   + cancelBooking()
+  + payBooking()
 }
 
 ' Venue 1 -> * Event

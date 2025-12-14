@@ -1,5 +1,6 @@
-from sqlalchemy import Column, String, Integer
+from sqlalchemy import Column, String, Integer, DateTime
 from app.database.session import Base
+
 
 class Venue(Base):
     __tablename__ = "venues"
@@ -8,3 +9,4 @@ class Venue(Base):
     address = Column(String,unique=True ,nullable=False)
     name = Column(String, nullable=False)
     capacity = Column(Integer, nullable=False)
+    inactive_since = Column(DateTime, nullable=True)

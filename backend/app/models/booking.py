@@ -11,4 +11,3 @@ class Booking(Base):
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     status = Column(Enum(Booking_State),default=Booking_State.IN_PROGRESS,nullable=False)
     total_price = Column(Float,nullable=True)
-
