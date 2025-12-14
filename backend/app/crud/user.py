@@ -13,7 +13,7 @@ def create_user(*, db: Session, user: UserCreate):
         email=user.email,
         password=get_password_hash(user.password),
         is_admin=user.is_admin,
-        created_at=datetime.now(timezone.utc).isoformat(),
+        created_at=datetime.now(timezone.utc),
         is_organizer = False,
     )
     db.add(db_user)
@@ -29,7 +29,7 @@ def create_superuser(*, db: Session, user: UserCreate):
         email=user.email,
         password=get_password_hash(user.password),
         is_admin=True,
-        created_at=datetime.now(timezone.utc).isoformat(),
+        created_at=datetime.now(timezone.utc),
         is_organizer = False,
     )
     db.add(db_user)

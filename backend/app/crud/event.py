@@ -62,8 +62,8 @@ def update_event(*, db: Session, event_id: int, event: EventUpdate):
 
 def delete_event(*, db: Session, event_id: int):
     db_event = db.query(Event).filter(Event.id == event_id).first()
-    db.commit()
     db.delete(db_event)
+    db.commit()
     return db_event
 
 def get_upcoming_events_by_venue(*,db:Session,venue_id:int):

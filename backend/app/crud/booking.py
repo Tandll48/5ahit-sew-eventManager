@@ -45,7 +45,7 @@ def pay_booking(*, db: Session, booking_id: int):
 
 def delete_booking(*, db: Session, booking_id: int):
     booking = get_booking(db=db, booking_id=booking_id)
-    db.commit()
     db.delete(booking)
+    db.commit()
     return booking
 
