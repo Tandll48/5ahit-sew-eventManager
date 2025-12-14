@@ -33,7 +33,7 @@ def test_delete_venue(db, test_venue):
     venue = crud.delete_venue(db=db, id=test_venue.id)
     assert venue.inactive_since is not None
 
-def test_activate_venue(db, test_venue):
-    crud.delete_venue(db=db, id=test_venue.id)
-    venue = crud.activate_venue(db=db, id=test_venue.id)
+def test_activate_venue(db, inactive_venue):
+    crud.delete_venue(db=db, id=inactive_venue.id)
+    venue = crud.activate_venue(db=db, id=inactive_venue.id)
     assert venue.inactive_since is None

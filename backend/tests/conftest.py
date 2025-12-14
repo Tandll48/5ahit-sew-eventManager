@@ -175,3 +175,51 @@ def test_ticket(db, test_booking, test_event):
     db.commit()
     db.refresh(ticket)
     return ticket
+
+@pytest.fixture
+def inactive_venue(db, test_venue):
+    test_venue.inactive_since = datetime.utcnow()
+    db.add(test_venue)
+    db.commit()
+    db.refresh(test_venue)
+    return test_venue
+
+@pytest.fixture
+def test_past_event(db, test_venue, test_organizer):
+    past_event = Event(
+        name="Past Event",
+        description="Past Event",
+        date_time=datetime.utcnow() - timedelta(days=5),
+        price_per_ticket=30.0,
+        venue_id=test_venue.id,
+        organizer_id=test_organizer.id,
+        available_tickets=test_venue.capacity
+    )
+    db.add(past_event)
+    db.commit()
+    db.refresh(past_event)
+    return past_event
+
+@pytest.fixture
+def another_user(db):
+    user = User(
+        name="Another User",
+        email="another@test.com",
+        phone_number="6542321",
+        password=get_password_hash("pass"),
+        is_admin=False,
+        is_organizer=False,
+        created_at=datetime.utcnow()
+    )
+    db.add(user)
+    db.commit()
+    db.refresh(user)
+    return user
+
+@pytest.fixture
+def client_with_another_user(client: TestClient, db, another_user):
+    def override_get_current_user():
+        return db.merge(another_user)
+    app.dependency_overrides[get_current_user] = override_get_current_user
+    app.dependency_overrides[get_db] = lambda: db
+    return client
