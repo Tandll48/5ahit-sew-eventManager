@@ -9,7 +9,7 @@ enum BookingStatus {
 
 
 class User {
-  - user_id: int
+  - id: int
   - name: string
   - email: string
   - password_hash: string
@@ -29,7 +29,7 @@ class User {
 }
 
 class Venue {
-  - venue_id: int
+  - id: int
   - name: string
   - address: string
   - capacity: int
@@ -42,7 +42,7 @@ class Venue {
 }
 
 class Event {
-  - event_id: int
+  - id: int
   - name: string
   - description: string
   - date_time: datetime
@@ -52,11 +52,14 @@ class Event {
   - price_per_ticket: decimal
   --
   + createEvent()
-  + readEvent()
+  + getEvent()
+  + getAllEvents
+  + getEventsByVenue()
+  + getEventsByOrganizer()
+  + getUpcomingEvents()
+  + getPastEvents()
   + updateEvent()
   + deleteEvent()
-  + listEvents()
-  + getDetails()
 }
 
 class Ticket {

@@ -1,4 +1,5 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, datetime
+from typing import Optional
 
 class VenueBase(BaseModel):
     name:str = Field(...)
@@ -7,6 +8,7 @@ class VenueBase(BaseModel):
 
 class VenueInDB(VenueBase):
     id: int = Field(...)
+    inactive_since: Optional[datetime]
 
     class Config:
         from_attributes = True

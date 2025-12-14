@@ -1,6 +1,8 @@
+from sqlalchemy import DateTime, Null
 from sqlalchemy.orm import Session
 from app.models.venue import Venue
 from app.schemas.venue import VenueBase
+from datetime import datetime
 
 def create_venue(*, db:Session, venue:VenueBase):
     db_venue = Venue(
@@ -33,6 +35,14 @@ def update_venue(*,db:Session,id:int, venue:VenueBase):
 
 def delete_venue(*, db:Session, id:int):
     db_venue = get_venue(db=db,venue_id=id)
-    db.delete(db_venue)
+    db_venue.inactive_since = datetime.now()
     db.commit()
+    db.refresh(db_venue)
+    return db_venue
+
+def activate_venue(*, db:Session, id:int):
+    db_venue = get_venue(db=db,venue_id=id)
+    db_venue.inactive_since = None
+    db.commit()
+    db.refresh(db_venue)
     return db_venue
